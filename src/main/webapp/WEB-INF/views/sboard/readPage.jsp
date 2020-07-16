@@ -2,6 +2,13 @@
 	pageEncoding="UTF-8"%>
 
 <%@include file="../include/header.jsp"%>
+<!-- 
+handlebars 템플릿을 사용하기 위한 jQuery 라이브러리 추가
+
+handlebars를 사용하는 이유
+1. 화면에 반복적으로 처리되는 템플릿 코들르 처리할 수 있다.
+2. 서버에서는 댓글의 목록과 댓글의 리스트 데이터를 한 번에 전송할 수 있다.
+ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
 <!-- Main content -->
 <section class="content">
@@ -16,7 +23,7 @@
 				<!-- /.box-header -->
 
 				<form role="form" action="modifyPage" method="post">
-
+					<!-- 기존 board/readPage.jsp에서 searchType, keyword가 추가됬다. -->
 					<input type='hidden' name='bno' value="${boardVO.bno}"> <input
 						type='hidden' name='page' value="${cri.page}"> <input
 						type='hidden' name='perPageNum' value="${cri.perPageNum}">
@@ -61,10 +68,10 @@
 	<!-- /.row -->
 
 
-
 	<div class="row">
 		<div class="col-md-12">
 
+			<!-- 댓글 등록 HTML -->
 			<div class="box box-success">
 				<div class="box-header">
 					<h3 class="box-title">ADD NEW REPLY</h3>
@@ -83,23 +90,27 @@
 						REPLY</button>
 				</div>
 			</div>
+			<!-- //댓글 등록 HTML -->
 
-
+			<!-- 댓글 목록 보기 -->
 			<!-- The time line -->
 			<ul class="timeline">
 			  <!-- timeline time label -->
 			<li class="time-label" id="repliesDiv">
 			  <span class="bg-green">
-			    Replies List <small id='replycntSmall'> [ ${boardVO.replycnt} ] </small>
+			    Replies List <small id='replycntSmall'> [ ${boardVO.replycnt} ] <%--댓글 개수 --%></small>
 			    </span>
 			  </li>
 			</ul>
-
+			<!-- //댓글 목록 보기 -->
+			
+			<!-- 댓글 하단 페이징 -->
 			<div class='text-center'>
 				<ul id="pagination" class="pagination pagination-sm no-margin ">
 
 				</ul>
 			</div>
+			<!-- //댓글 하단 페이징 -->
 
 		</div>
 		<!-- /.col -->
@@ -133,6 +144,11 @@
 </section>
 <!-- /.content -->
 
+<!-- 
+handlebars 템플릿 코드 
+하단에 Modify 버튼을 누르면 a태그 속성에 data-target="#modifyModal"이 모달창을 호출함.
+모달창에 id는 modifyModal임.
+-->
 <script id="template" type="text/x-handlebars-template">
 {{#each .}}
 <li class="replyLi" data-rno={{rno}}>
@@ -153,6 +169,8 @@
 </script>
 
 <script>
+	//날짜를 원하는 형식으로 만들어준다.
+	//registerHelper로 원하는 기능을 만든다.
 	Handlebars.registerHelper("prettifyDate", function(timeValue) {
 		var dateObj = new Date(timeValue);
 		var year = dateObj.getFullYear();
@@ -179,21 +197,26 @@
 	
 	var replyPage = 1;
 	
-	//pageInfo -> /replies/bno/1
+	//특정 게시물에 대한 댓글 페이지 처리 함수
+	//pageInfo -> /replies/bno(게시글 번호)/replyPage(댓글 페이지 번호)
 	function getPage(pageInfo) {
-
+		
 		$.getJSON(pageInfo, function(data) {
 			//댓글 출력 함수
+			//댓글목록, 댓글이 출력될 영역, 댓글 템플릿이 파라미터로 넘어간다.
 			printData(data.list, $("#repliesDiv"), $('#template'));
 			//하단 페이징 출력 함수
+			//pageMaker, 페이징이 출력될 영역이 파라미터로 넘어간다.
 			printPaging(data.pageMaker, $(".pagination"));
 			//모달창을 숨긴다.
 			$("#modifyModal").modal('hide');
+			//댓글 총 개수
 			$("#replycntSmall").html("[ " + data.pageMaker.totalCount +" ]");
 
 		});
 	}
-
+	
+	//하단 페이징 출력 함수
 	var printPaging = function(pageMaker, target) {
 
 		var str = "";
@@ -227,7 +250,7 @@
 
 	});
 	
-
+	//댓글 페이지 번호 클릭 시
 	$(".pagination").on("click", "li a", function(event){
 		
 		event.preventDefault();
@@ -238,11 +261,14 @@
 		
 	});
 	
-
+	//댓글 등록시 
 	$("#replyAddBtn").on("click",function(){
 		 
+		 //작성자
 		 var replyerObj = $("#newReplyWriter");
+		 //내용
 		 var replytextObj = $("#newReplyText");
+		 
 		 var replyer = replyerObj.val();
 		 var replytext = replytextObj.val();
 		
@@ -260,6 +286,7 @@
 					if(result == 'SUCCESS'){
 						alert("등록 되었습니다.");
 						replyPage = 1;
+						//댓글 목록을 다시 불러온다.
 						getPage("/replies/"+bno+"/"+replyPage );
 						replyerObj.val("");
 						replytextObj.val("");
@@ -267,7 +294,7 @@
 			}});
 	});
 
-
+	//댓글 영역 클릭 시 댓글 번호와 댓글 내용이 모달창에 세팅됨.
 	$(".timeline").on("click", ".replyLi", function(event){
 		
 		var reply = $(this);
@@ -278,10 +305,11 @@
 	});
 	
 	
-
+	//모달창에서 수정 버튼 클릭 시
 	$("#replyModBtn").on("click",function(){
-		  
+		  //댓글 번호
 		  var rno = $(".modal-title").html();
+		  //댓글 내용
 		  var replytext = $("#replytext").val();
 		  
 		  $.ajax({
@@ -300,10 +328,12 @@
 					}
 			}});
 	});
-
+	
+	//모달 창에서 댓글 삭제 클릭 시
 	$("#replyDelBtn").on("click",function(){
-		  
+		  //댓글 번호
 		  var rno = $(".modal-title").html();
+		  //댓글 내용
 		  var replytext = $("#replytext").val();
 		  
 		  $.ajax({

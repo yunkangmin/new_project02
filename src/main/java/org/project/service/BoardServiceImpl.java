@@ -28,7 +28,8 @@ public class BoardServiceImpl implements BoardService {
   //  return dao.read(bno);
   //}
   
-  
+  //게시물 조회 시 조회수 증가 후 조회한다.
+  //isolation=Isolation.READ_COMMITTED는 다른 트랜잭션이 커밋하지 않은 데이터는 볼수 없다.
   @Transactional(isolation=Isolation.READ_COMMITTED)
   @Override
   public BoardVO read(Integer bno) throws Exception {

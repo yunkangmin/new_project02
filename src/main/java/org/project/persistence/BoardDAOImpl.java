@@ -45,13 +45,15 @@ public class BoardDAOImpl implements BoardDAO {
     return session.selectList(namespace + ".listAll");
   }
   
+  //게시글 목록 페이징 처리 
   @Override
   public List<BoardVO> listPage(int page) throws Exception {
-
+	//요청한 page가 0이거나 0보다 작으면 1을 디폴트로 세팅한다.
     if (page <= 0) {
       page = 1;
     }
-
+    
+    //시작페이지를 계산한다.
     page = (page - 1) * 10;
 
     return session.selectList(namespace + ".listPage", page);

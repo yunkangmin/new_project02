@@ -32,6 +32,16 @@ public class SampleController {
     vo.setMno(123);
 
     return vo;
+    
+// // 20200716135143
+// // http://localhost:8080/sample/sendVO
+//
+// {
+//   "mno": 123,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// }
+    
   }
 
   @RequestMapping("/sendList")
@@ -45,7 +55,64 @@ public class SampleController {
       vo.setMno(i);
       list.add(vo);
     }
+    
     return list;
+    
+//  / 20200716134904
+//// http://localhost:8080/sample/sendList
+//
+//[
+// {
+//   "mno": 0,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 1,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 2,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 3,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 4,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 5,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 6,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 7,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 8,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// },
+// {
+//   "mno": 9,
+//   "firstName": "길동",
+//   "lastName": "홍"
+// }
+//]
   }
 
   @RequestMapping("/sendMap")
@@ -60,7 +127,64 @@ public class SampleController {
       vo.setMno(i);
       map.put(i, vo);
     }
+    
     return map;
+    
+// // 20200716134954
+// // http://localhost:8080/sample/sendMap
+//
+// {
+//   "0": {
+//     "mno": 0,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "1": {
+//     "mno": 1,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "2": {
+//     "mno": 2,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "3": {
+//     "mno": 3,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "4": {
+//     "mno": 4,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "5": {
+//     "mno": 5,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "6": {
+//     "mno": 6,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "7": {
+//     "mno": 7,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "8": {
+//     "mno": 8,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   },
+//   "9": {
+//     "mno": 9,
+//     "firstName": "길동",
+//     "lastName": "홍"
+//   }
+// }
   }
 
   //@RestController가 별도의 뷰를 제공하지 않는 형태로 서비스를 실행하기 때문에 ResponseEntity 클래스를 사용하여

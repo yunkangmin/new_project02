@@ -1,3 +1,4 @@
+<!-- 검색기능이 포함된 게시글 목록 페이지 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -73,7 +74,7 @@
 								<td>${boardVO.bno}</td>
 								<td><a
 									href='/sboard/readPage${pageMaker.makeSearch(pageMaker.cri.page) }&bno=${boardVO.bno}'>
-										${boardVO.title} <strong>[ ${boardVO.replycnt} ]</strong>
+										${boardVO.title} <strong>[ ${boardVO.replycnt} ]<%--댓글 수 --%></strong>
 								</a></td>
 								<td>${boardVO.writer}</td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
@@ -137,11 +138,12 @@
 <script>
 	$(document).ready(
 			function() {
-
+				//검색 버튼 클릭 시
 				$('#searchBtn').on(
 						"click",
 						function(event) {
-
+							//검색 버튼을 클릭하면 pageMaker.makeQuery(1)로 페이지 번호를 1로 호출하면 page, perPageNum을 파라미터로 갖는 URI가 추가된다.
+							//searchType, keyword 파라미터도 쿼리스트링으로 추가된다.
 							self.location = "list"
 									+ '${pageMaker.makeQuery(1)}'
 									+ "&searchType="
@@ -149,7 +151,8 @@
 									+ "&keyword=" + $('#keywordInput').val();
 
 						});
-
+				
+				//글 등록 페이지로 이동한다.
 				$('#newBtn').on("click", function(evt) {
 
 					self.location = "register";

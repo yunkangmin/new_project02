@@ -16,6 +16,9 @@ import org.project.domain.PageMaker;
 import org.project.domain.SearchCriteria;
 import org.project.service.BoardService;
 
+//검색 기능이 있는 게시판
+//BoardController와 다른 점은 파라미터로 SearchCriteria를 사용한다.
+//경로의 호출도 간단하게 변경되었다.
 @Controller
 @RequestMapping("/sboard/*")
 public class SearchBoardController {
@@ -24,31 +27,39 @@ public class SearchBoardController {
 
   @Inject
   private BoardService service;
-
+  
+  //게시판 목록 페이지
+  //SearchCriteria는 Criteria를 상속하기 때문에 PageMaker가 작동하는데 아무러 문제가 없다.
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public void listPage(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 
     logger.info(cri.toString());
-
+    
+    //검색기능이 추가된 쿼리를 호출하도록 변경했다.
     // model.addAttribute("list", service.listCriteria(cri));
     model.addAttribute("list", service.listSearchCriteria(cri));
 
     PageMaker pageMaker = new PageMaker();
     pageMaker.setCri(cri);
-
+    
+    //검색기능이 추가된 쿼리를 호출하도록 변경했다.
     // pageMaker.setTotalCount(service.listCountCriteria(cri));
     pageMaker.setTotalCount(service.listSearchCount(cri));
 
     model.addAttribute("pageMaker", pageMaker);
   }
-
+  
+  //조회페이지 호출
+  //기존에 BoardController에서 변경된 점은 파라미터가 SearchCriteria로 변경된 점 외에는 없다.
   @RequestMapping(value = "/readPage", method = RequestMethod.GET)
   public void read(@RequestParam("bno") int bno, @ModelAttribute("cri") SearchCriteria cri, Model model)
       throws Exception {
 
     model.addAttribute(service.read(bno));
   }
-
+  
+  //삭제처리
+  //기존에 BoardController에서 변경된 점은  파라미터가 SearchCriteria로 변경되었고 데이터로 searchType, keyword가 추가되었다.
   @RequestMapping(value = "/removePage", method = RequestMethod.POST)
   public String remove(@RequestParam("bno") int bno, SearchCriteria cri, RedirectAttributes rttr) throws Exception {
 

@@ -44,6 +44,9 @@
 	  <url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	<!-- REST 방식으로 서비스 제공 시 브라우저가 PUT, PATCH, DELETE 방식을 지원하지 않는 경우가 발생한다.
+	form 태그에서 <input type="hidden" name="_method" value="PUT">과 같은 형태로 사용되기 위해서 아래와 같이 
+	필처로 설정한다.  -->
 	<filter>
 		<filter-name>hiddenHttpMethodFilter</filter-name>
 		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>

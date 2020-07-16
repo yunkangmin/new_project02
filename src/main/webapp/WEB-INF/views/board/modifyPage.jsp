@@ -1,3 +1,4 @@
+<!--  목록 페이지로 이동시 페이지 번호가 유지되는 수정페이지. -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -16,7 +17,7 @@
 				<!-- /.box-header -->
 
 				<form role="form" action="modifyPage" method="post">
-
+					<!-- 페이지 번호가 유지되기 위해 page와 perPageNum을 hidden으로 유지한다. -->
 					<input type='hidden' name='page' value="${cri.page}"> <input
 						type='hidden' name='perPageNum' value="${cri.perPageNum}">
 
@@ -57,14 +58,15 @@
 										var formObj = $("form[role='form']");
 
 										console.log(formObj);
-
+										//수정 취소 시 
+										//다시 목록 페이지로 간다. 페이지 번호가 유지된다.
 										$(".btn-warning")
 												.on(
 														"click",
 														function() {
 															self.location = "/board/listPage?page=${cri.page}&perPageNum=${cri.perPageNum}";
 														});
-
+										//저장시
 										$(".btn-primary").on("click",
 												function() {
 													formObj.submit();

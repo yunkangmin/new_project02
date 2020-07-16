@@ -1,3 +1,4 @@
+<!-- 하단 페이징 처리된 페이지 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -65,8 +66,10 @@
 
 							<c:forEach begin="${pageMaker.startPage }"
 								end="${pageMaker.endPage }" var="idx">
+								<%-- c:out을 사용하는 이유는 '<'를 그대로 출력해준다. 보안에 좋다. --%>
 								<li
 									<c:out value="${pageMaker.cri.page == idx?'class =active':''}"/>>
+									<%-- 제이쿼리를 이용하여 링크 처리. 제이쿼리 소스 참고 --%>
 									<a href="${idx}">${idx}</a>
 								</li>
 							</c:forEach>
@@ -104,8 +107,9 @@
 		alert("처리가 완료되었습니다.");
 	}
 	
+	//하단 페이지 번호 클릭 시 작동
 	$(".pagination li a").on("click", function(event){
-		
+		//실제 화면의 이동을 막는다.
 		event.preventDefault(); 
 		
 		var targetPage = $(this).attr("href");

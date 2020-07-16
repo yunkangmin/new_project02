@@ -1,3 +1,4 @@
+<!-- 검색기능이 추가된 수정 페이지 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -16,7 +17,7 @@
 				<!-- /.box-header -->
 
 <form role="form" action="modifyPage" method="post">
-
+	<!-- searchType, keyword가 추가됨. -->
 	<input type='hidden' name='page' value="${cri.page}"> <input
 		type='hidden' name='perPageNum' value="${cri.perPageNum}">
 	<input type='hidden' name='searchType' value="${cri.searchType}">
@@ -58,13 +59,14 @@ $(document).ready(
 		var formObj = $("form[role='form']");
 
 		console.log(formObj);
-
+		//취소 버튼 클릭시
+		//게시글 목록으로 이동한다.
 		$(".btn-warning")
 				.on("click",function() {
 					self.location = "/sboard/list?page=${cri.page}&perPageNum=${cri.perPageNum}"
 							+ "&searchType=${cri.searchType}&keyword=${cri.keyword}";
 				});
-
+		//저장버튼 클릭시
 		$(".btn-primary").on("click",
 				function() {
 					formObj.submit();

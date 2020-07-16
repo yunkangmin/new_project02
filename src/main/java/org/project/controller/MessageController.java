@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.project.domain.MessageVO;
 import org.project.service.MessageService;
 
+// aop 테스트를 위해 생성한 파일. 테스트용도로만 사용. 
 @RestController
 @RequestMapping("/messages")
 public class MessageController {

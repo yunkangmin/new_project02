@@ -1,3 +1,4 @@
+<!-- 페이지정보를 유지하는 조회페이지 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
   pageEncoding="UTF-8"%>
 
@@ -54,17 +55,20 @@ $(document).ready(function(){
 	
 	console.log(formObj);
 	
+	//Modify 버튼 클릭 시 
 	$(".btn-warning").on("click", function(){
 		formObj.attr("action", "/board/modifyPage");
 		formObj.attr("method", "get");		
 		formObj.submit();
 	});
 	
+	//REMOVE 클릭 시
 	$(".btn-danger").on("click", function(){
 		formObj.attr("action", "/board/removePage");
 		formObj.submit();
 	});
 	
+	//GO LIST 버튼 클릭 시 
 	$(".goListBtn").on("click", function(){
 		formObj.attr("method", "get");
 		formObj.attr("action", "/board/listPage");

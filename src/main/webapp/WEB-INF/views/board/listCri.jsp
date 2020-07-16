@@ -1,3 +1,4 @@
+<!-- 컨트롤러에서Criteria 클래스를 이용하여 파라미터를 받아 게시글 목록 처리를 한 페이지 listAll.jsp와 다른 점은 없다. -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>

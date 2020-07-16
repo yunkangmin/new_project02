@@ -91,7 +91,9 @@ public class PageMaker {
 
 		return uriComponents.toUriString();
 	}
-
+	
+	//검색기능이 추가된 게시글에서 사용될 URI 생성
+	//page, perPageNum, searchType, keyword 4개의 파라미터가 있다.
 	public String makeSearch(int page) {
 
 		UriComponents uriComponents = UriComponentsBuilder.newInstance().queryParam("page", page)
@@ -101,7 +103,8 @@ public class PageMaker {
 
 		return uriComponents.toUriString();
 	}
-
+	
+	//한글 인코딩 처리를 한다.
 	private String encoding(String keyword) {
 
 		if (keyword == null || keyword.trim().length() == 0) {

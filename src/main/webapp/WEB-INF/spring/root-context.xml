@@ -12,7 +12,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
-	
+	<!-- 
+		aop proxy 객체 생성을 위한 설정
+	 	AspectJ 라이브러리를 이용해서 Proxy 객체를 생성해낸다.
+	-->
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 	
 	<context:property-placeholder location="classpath:/db.properties"/>
@@ -39,11 +42,13 @@
 	      value="classpath:mappers/**/*Mapper.xml"></property>	
 	</bean>
 	
+	<!-- 트랜잭션 처리를 위해 필요 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
-
+	
+	<!-- 트랜잭션 처리를 위해 필요. @Transactional 애노테이션을 이용한 트랜잭션의 관리가 가능하게 해준다. -->
 	<tx:annotation-driven />
 	
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" 

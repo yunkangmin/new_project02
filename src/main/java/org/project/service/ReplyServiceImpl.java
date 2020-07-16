@@ -20,6 +20,7 @@ public class ReplyServiceImpl implements ReplyService {
   @Inject
   private BoardDAO boardDAO;
 
+  //댓글을 등록하고 게시글 테이블에 댓글 개수를 1 증가 시킨다.
   @Transactional
   @Override
   public void addReply(ReplyVO vo) throws Exception {
@@ -28,6 +29,7 @@ public class ReplyServiceImpl implements ReplyService {
     boardDAO.updateReplyCnt(vo.getBno(), 1);
   }
   
+  //댓글 삭제 시 댓글 번호에 해당하는 게시물 번호를 가져오고, 해당 댓글을 삭제하고, 게시글 테이블에서 댓글 개수를 -1시킨다.
   @Transactional
   @Override
   public void removeReply(Integer rno) throws Exception {

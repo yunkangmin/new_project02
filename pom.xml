@@ -32,26 +32,29 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-		
+			
+		<!-- aop 사용을 위해 필요 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
 		
+		<!-- 트랜잭션 처리를 위해 필요 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
 				
-		<!-- AspectJ -->
+		<!-- AspectJ(aop 기능 적용을 위해서는 AspectJ문법을 사용해야한다.)  -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
+		<!-- AspectJ(aop 기능 적용을 위해서는 AspectJ문법을 사용해야한다.)  -->
 		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjtools -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -174,7 +177,9 @@
 			<version>1.16</version>
 		</dependency>
 		
+		
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<!-- @RestController에서 JSON을 사용하기위해 추가한다. -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

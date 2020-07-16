@@ -3,7 +3,8 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.zerock.mapper.ReplyMapper">
+<!-- 댓글관련 파일 -->
+<mapper namespace="org.project.mapper.ReplyMapper">
 
 	<select id="list" resultType="ReplyVO">
 		select
@@ -30,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from tbl_reply where rno =#{rno}
 	</delete>
 
-
+	<!-- 댓글 페이징 처리 -->
 	<select id="listPage" resultType="ReplyVO">
 		select
 		*
@@ -41,11 +42,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by rno desc
 		limit #{cri.pageStart}, #{cri.perPageNum}
 	</select>
-
+	
+	<!-- 해당 게시물 전체 댓글 개수를 가져온다. -->
 	<select id="count" resultType="int">
 		select count(bno) from tbl_reply where bno =#{bno}
 	</select>
 	
+	<!-- 게시물 번호 가져오기. 게시물번호를 파라미터로 받을 수도 있지만 트랜잭션 처리를 인위적으로 하기 위해 쿼리를 추가했다. -->
 	<select id="getBno" resultType="int">
 		select bno from tbl_reply where rno = #{rno}
 	</select>

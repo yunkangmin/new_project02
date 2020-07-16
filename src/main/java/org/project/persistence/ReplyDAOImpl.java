@@ -17,7 +17,7 @@ public class ReplyDAOImpl implements ReplyDAO {
   @Inject
   private SqlSession session;
 
-  private static String namespace = "org.zerock.mapper.ReplyMapper";
+  private static String namespace = "org.project.mapper.ReplyMapper";
 
   @Override
   public List<ReplyVO> list(Integer bno) throws Exception {

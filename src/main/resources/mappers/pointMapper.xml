@@ -3,6 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!-- aop 테스트를 위해 생성한 파일. 테스트용도로만 사용. -->
 <mapper namespace="org.project.mapper.PointMapper">
 
 	<update id="updatePoint">
