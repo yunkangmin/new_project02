@@ -74,7 +74,7 @@
 								<td>${boardVO.bno}</td>
 								<td><a
 									href='/sboard/readPage${pageMaker.makeSearch(pageMaker.cri.page) }&bno=${boardVO.bno}'>
-										${boardVO.title} <strong>[ ${boardVO.replycnt} ]<%--댓글 수 --%></strong>
+										${boardVO.title} <strong>[ ${boardVO.replycnt} ]<%--댓글 개수 --%></strong>
 								</a></td>
 								<td>${boardVO.writer}</td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"

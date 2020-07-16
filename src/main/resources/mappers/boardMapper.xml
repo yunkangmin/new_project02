@@ -135,7 +135,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
 </select>  
 
-<!-- 댓글  개수 증가 쿼리 -->
+<!-- 댓글  개수 증가 쿼리 
+#{amount}는 1.
+-->
 <update id="updateReplyCnt">
   update tbl_board set replycnt = replycnt + #{amount} where bno = #{bno}
 </update>
