@@ -8,7 +8,8 @@
 
 ##데이터베이스관련 설정
 - 게시판 테이블
-create table tbl_board (
+
+    >create table tbl_board (
 bno INT NOT NULL auto_increment,
 title VARCHAR(200) NOT null,
 content TEXT null,
@@ -19,10 +20,10 @@ primary key tbl_board (bno)
  );
 ####
 - 페이징 처리를 위해 충분한 양의 dummy 데이터 넣기
-insert into tbl_board(title, content, writer) (select title, content, writer from tbl_board);
+    >insert into tbl_board(title, content, writer) (select title, content, writer from tbl_board);
 ####
 - 댓글 테이블
- create table tbl_reply (
+    >create table tbl_reply (
 	rno int not null auto_increment,
     bno int not null default 0,
     replytext varchar(1000) not null,
@@ -33,13 +34,13 @@ insert into tbl_board(title, content, writer) (select title, content, writer fro
  );
  ####
  - 외래키 추가
- alter table tbl_reply add constraint fk_board foreign key(bno) references tbl_board(bno);
+    >alter table tbl_reply add constraint fk_board foreign key(bno) references tbl_board(bno);
  ####
  - 댓글 개수 처리위해 tbl_board 테이블에 replycnt 컬럼을 추가
- alter table tbl_board add column replycnt int default 0;
+    >alter table tbl_board add column replycnt int default 0;
  ####
  - 게시물 조회화면에서 댓글 수 출력 위해 tbl_reply와 tbl_board 테이블의 댓글 숫자를 일치하게 변경한다.
- update tbl_board set replycnt =
+    >update tbl_board set replycnt =
 	(select count(rno)
     from
     tbl_reply
