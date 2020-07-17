@@ -59,8 +59,7 @@ primary key tbl_board (bno)
     from
     tbl_reply
     where bno = tbl_board.bno)where bno >0;
-
-
+####
 ##협업방식
 
 - 브랜치는 master- develop - feature 3개 브랜치를 사용한다.
