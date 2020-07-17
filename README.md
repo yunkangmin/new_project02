@@ -1,12 +1,12 @@
  
-##개발환경
+## 개발환경
 - STS 버전 3.9.13.RELEASE
 - 스프링 버전 4.3.8.RELEASE
 - TOMCAT 9.0
 - MYSQL 5.7.16
 - MyBatis 3.4.1
 
-##데이터베이스관련 설정
+## 데이터베이스관련 설정
 - 게시판 테이블
 
     >create table tbl_board (
@@ -59,8 +59,8 @@ primary key tbl_board (bno)
     from
     tbl_reply
     where bno = tbl_board.bno)where bno >0;
-####
-##협업방식
+
+## 협업방식
 
 - 브랜치는 master- develop - feature 3개 브랜치를 사용한다.
 - master는 실제 배포되는 브랜치이다. develop(개발 브랜치) 브랜치에서 테스트된 소스를 master에 merge하게 된다. feature 브랜치는 기능브랜치로서 개발자가 하나의 기능을 개발한 뒤 develop 브랜치에 merge하고 삭제한다.
