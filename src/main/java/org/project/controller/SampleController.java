@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.project.domain.SampleVO;
 
+//REST API 테스트 컨트롤러
 @RestController //@RestController는 별도의 처리가 없어도 객체는 자동으로 JSON으로 처리된다.
 @RequestMapping("/sample")
 public class SampleController {

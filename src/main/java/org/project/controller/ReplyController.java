@@ -18,6 +18,7 @@ import org.project.domain.PageMaker;
 import org.project.domain.ReplyVO;
 import org.project.service.ReplyService;
 
+//댓글 컨트롤러
 @RestController
 @RequestMapping("/replies")
 public class ReplyController {
