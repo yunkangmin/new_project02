@@ -89,7 +89,7 @@ public class UploadController {
    
     return 
       new ResponseEntity<>(
-    	  // /2020/07/17/58248f05-9732-48c1-a4b7-ba2a7a24875a_994BEF355CD0313D05.png가 리턴됨.
+    	  // /2020/07/21/s_aa6bd1e8-7f04-43c5-9eca-096ccf0ab3f3_994BEF355CD0313D05.png가 리턴됨.
     	  // 파일을 업로드하고 업로드한 경로를 리턴함.
           UploadFileUtils.uploadFile(uploadPath, 
                 file.getOriginalFilename(), 
@@ -134,7 +134,7 @@ public class UploadController {
 		  //파일이름이 한글인 경우 깨지지 않게 하기 위해 인코딩 처리를 한다.
           new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
       }
-      										//commons 라이브러리를 이용해 실제 파일데이터를 읽는다.							
+      										//commons 라이브러리를 이용해 파일로 부터 실제 파일데이터를 읽는다.	byte[]가 리턴된다.						
         entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), 
           headers, 
           HttpStatus.CREATED);
@@ -147,31 +147,38 @@ public class UploadController {
       return entity;    
   }
     
+  //파일 삭제
   @ResponseBody
   @RequestMapping(value="/deleteFile", method=RequestMethod.POST)
   public ResponseEntity<String> deleteFile(String fileName){
     
     logger.info("delete file: "+ fileName);
-    
+    //확장자 추출
     String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
-    
+    //이미지 파일일 시 MIME 타입 반환.
     MediaType mType = MediaUtils.getMediaType(formatName);
     
+    //이미지 파일이라면
     if(mType != null){      
-      
+      //원본파일 이름 추출. /2020/07/17/
+      //substring은 index가 0부터 시작하며 두번째 매개변수가 12라면 그 전인 11까지 가져온다.
       String front = fileName.substring(0,12);
+      //58248f05-9732-48c1-a4b7-ba2a7a24875a_994BEF355CD0313D05.png
       String end = fileName.substring(14);
+      //원본 파일 지우기.
       new File(uploadPath + (front+end).replace('/', File.separatorChar)).delete();
     }
-    
+    //썸네일, 일반 파일 지우기.
     new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
     
     
     return new ResponseEntity<String>("deleted", HttpStatus.OK);
   }  
   
+  //실제로 폴더 경로 상에 첨부파일 삭제
   @ResponseBody
   @RequestMapping(value="/deleteAllFiles", method=RequestMethod.POST)
+  //files[]로 배열을 파라미터로 받을 수 있다.
   public ResponseEntity<String> deleteFile(@RequestParam("files[]") String[] files){
     
     logger.info("delete all files: "+ files);
@@ -181,17 +188,20 @@ public class UploadController {
     }
     
     for (String fileName : files) {
+      //확장자 가져오기.
       String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
-      
+      //MIME 타입가져오기. MIME 타입이란 웹을 통해 전달되는 다양한 형태의 파일을 표현하기 위해 사용된다.
       MediaType mType = MediaUtils.getMediaType(formatName);
-      
+      //이미지 파일이라면
       if(mType != null){      
-        
+        // /년/월/일
         String front = fileName.substring(0,12);
+        // 's_'를 뺀 원본파일이름.
         String end = fileName.substring(14);
+        //원본이미지파일 삭제
         new File(uploadPath + (front+end).replace('/', File.separatorChar)).delete();
       }
-      
+      //썸네일이미지, 일반파일 삭제
       new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
       
     }

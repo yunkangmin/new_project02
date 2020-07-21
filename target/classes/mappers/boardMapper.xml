@@ -146,5 +146,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <update id="updateViewCnt">
   update tbl_board set viewcnt = viewcnt +1 where bno = #{bno}
 </update>
+
+<!-- 
+게시물 등록 시 첨부파일 등록 쿼리. mysql은 LAST_INSERT_ID()(바로 직전에 등록된 번호)함수로 
+tlb_board 테이블에 auto_increment로 설정되어 있는 bno값을  가져올 수 있다.
+-->
+<insert id="addAttach">
+insert into tbl_attach(fullname, bno) values (#{fullName}, LAST_INSERT_ID())
+</insert> 
+
+<!-- 게시글 조회 시 첨부 파일 가져오기 -->
+<select id="getAttach" resultType="string">
+select fullname from tbl_attach where bno = #{bno} order by regdate
+</select> 
+
+<!-- 게시물 수정 시 첨부파일 삭제 -->
+<delete id="deleteAttach">
+delete from tbl_attach where bno = #{bno}
+</delete>
+
+<!-- 게시물 수정 시 새로운 첨부파일 추가 -->
+<insert id="replaceAttach">
+insert into tbl_attach(fullname, bno) values (#{fullName}, #{bno})
+</insert>
  
 </mapper>

@@ -100,5 +100,40 @@ public class BoardDAOImpl implements BoardDAO {
     session.update(namespace+".updateViewCnt", bno);
     
   }
+  
+  @Override
+  public void addAttach(String fullName) throws Exception {
+    
+    session.insert(namespace+".addAttach", fullName);
+    
+  }
+  
+  @Override
+  public List<String> getAttach(Integer bno) throws Exception {
+    
+    return session.selectList(namespace +".getAttach", bno);
+  }
+ 
+  //특정 게시물 번호에 해당하는 모든 첨부파일 삭제
+  @Override
+  public void deleteAttach(Integer bno) throws Exception {
+
+    session.delete(namespace+".deleteAttach", bno);
+    
+  }
+  
+  //새로운 첨부파일 추가.
+  //첨부파일 이름과 게시물번호가 파라미터로 온다.
+  @Override
+  public void replaceAttach(String fullName, Integer bno) throws Exception {
+    
+    Map<String, Object> paramMap = new HashMap<String, Object>();
+    
+    paramMap.put("bno", bno);
+    paramMap.put("fullName", fullName);
+    
+    session.insert(namespace+".replaceAttach", paramMap);
+    
+  }
 
 }

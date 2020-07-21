@@ -60,6 +60,21 @@ primary key tbl_board (bno)
     tbl_reply
     where bno = tbl_board.bno)where bno >0;
 
+####
+
+- 첨부파일 테이블
+    >create table tbl_attach (
+	fullName varchar(150) not null,
+    bno int not null,
+    regdate timestamp default now(),
+    primary key(fullName)
+);
+
+- 첨부파일 테이블 외래키 추가
+    >alter table tbl_attach add constraint fk_board_attach
+foreign key (bno) references tbl_board (bno);
+
+
 ## 협업방식
 
 - 브랜치는 master- develop - feature 3개 브랜치를 사용한다.

@@ -70,8 +70,9 @@ small {
 				  contentType: false,//필수
 				  type: 'POST',
 				  
-				  //업로드한 파일 경로가 리턴된다.
+				  //업로드한 파일의 썸네일 경로가 리턴된다.
 				  success: function(data){
+					  // data는 /2020/07/21/s_aa6bd1e8-7f04-43c5-9eca-096ccf0ab3f3_994BEF355CD0313D05.png.
 					  var str ="";
 					  //이미지 파일인지 검사한다.
 					  //확장자를 따로 추출해서 검사할 수 있게 해야함.
@@ -90,7 +91,7 @@ small {
 				});	
 		});
 
-
+		// X 클릭 시
 		$(".uploadedList").on("click", "small", function(event){
 			
 				 var that = $(this);
@@ -98,10 +99,12 @@ small {
 			   $.ajax({
 				   url:"deleteFile",
 				   type:"post",
-				   data: {fileName:$(this).attr("data-src")},
+				   //파일경로는 /2020/07/18/s_f0ac0864-0add-474c-9c85-ea7c47e1d1b7_994BEF355CD0313D05.png
+				   data: {fileName:$(this).attr("data-src")}, 
 				   dataType:"text",
 				   success:function(result){
 					   if(result == 'deleted'){
+						   //화면 상에서 썸네일, 일반 파일이름 삭제
 						   that.parent("div").remove();
 					   }
 				   }
@@ -151,9 +154,10 @@ $(".fileDrop").on("drop", function(event) {
 		});			
 });	 */
 
-
+//브라우저에 출력되는 파일이름을 줄여준다.
+//원래 파일이름만 추출하여 반환한다.
 function getOriginalName(fileName){	
-
+	//이미지 파일이라면
 	if(checkImageType(fileName)){
 		return;
 	}
@@ -163,13 +167,15 @@ function getOriginalName(fileName){
 	
 }
 
-
+//업로드된 이미지 링크 클릭 시 썸네일이 아닌 원본 이미지를 띄우기 위해 파일 경로앞에 's_'를 제외한 경로를 추출한 뒤 반환한다.
 function getImageLink(fileName){
-	
+	//이미지 파일이 아니라면 return;
 	if(!checkImageType(fileName)){
 		return;
 	}
+	// /년/월/일
 	var front = fileName.substr(0,12);
+	//'s_'제거한 파일이름.
 	var end = fileName.substr(14);
 	
 	return front + end;

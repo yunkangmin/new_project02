@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@include file="../include/header.jsp"%>
+<script type="text/javascript" src="/resources/js/upload.js"></script>
 <!-- 
 handlebars 템플릿을 사용하기 위한 jQuery 라이브러리 추가
 
@@ -11,6 +12,27 @@ handlebars를 사용하는 이유
  -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
 <!-- Main content -->
+<style type="text/css">
+  .popup {position: absolute;}
+  /* 브라우저 전체에 투명한 검정배경을 보이게 한다. */
+  .back { background-color: gray; opacity:0.5; width: 100%; height: 300%; overflow:hidden;  z-index:1101;}
+  .front { 
+     z-index:1110; opacity:1; boarder:1px; margin: auto; 
+    }
+    /* 이미지가 실제 보여지는 영역을 설정한다.position: absolute;속성이 들어간 태그를 기준으로  position:relative;가 잡힌다.*/
+   .show{
+     position:relative;
+     max-width: 1200px; 
+     max-height: 800px; 
+     overflow: auto;       
+   } 
+	
+</style>
+<!-- 썸네일을 클릭했을 때 원본 이미지를 보여주기 위한 영역. -->
+<div class='popup back' style="display:none;"></div>
+	<div id="popup_front" class='popup front' style="display:none;">
+	 <img id="popup_img">
+</div>
 <section class="content">
 	<div class="row">
 		<!-- left column -->
@@ -50,6 +72,9 @@ handlebars를 사용하는 이유
 					</div>
 				</div>
 				<!-- /.box-body -->
+				
+				<!-- 기존에 업로드된 파일들이 보여질 영역  -->
+				<ul class="mailbox-attachments clearfix uploadedList"></ul>
 
 			  <div class="box-footer">
 			    <button type="submit" class="btn btn-warning" id="modifyBtn">Modify</button>
@@ -143,6 +168,15 @@ handlebars를 사용하는 이유
 	
 </section>
 <!-- /.content -->
+<script id="templateAttach" type="text/x-handlebars-template">
+<li data-src='{{fullName}}'>
+  <span class="mailbox-attachment-icon has-img"><img src="{{imgsrc}}" alt="Attachment"></span>
+  <div class="mailbox-attachment-info">
+	<a href="{{getLink}}" class="mailbox-attachment-name">{{fileName}}</a>
+	</span>
+  </div>
+</li>                
+</script>  
 
 <!-- 
 handlebars 템플릿 코드 
@@ -217,16 +251,18 @@ handlebars 템플릿 코드
 	}
 	
 	//하단 페이징 출력 함수
+	//pageMaker와 하단 페이징 영역인 target을 파라미터로 받는다.
 	var printPaging = function(pageMaker, target) {
-
+		//하단 페이징 영역에 출력할 html을 담는 변수
 		var str = "";
-
+		//이전 표시가 보인다면
 		if (pageMaker.prev) {
 			str += "<li><a href='" + (pageMaker.startPage - 1)
 					+ "'> << </a></li>";
 		}
-
+		//for문을 돌면서 페이지 번호를 만든다.
 		for (var i = pageMaker.startPage, len = pageMaker.endPage; i <= len; i++) {
+			//요청한 페이지 번호(pageMaker.cri.page)라면 파란색으로 표시된다.
 			var strClass = pageMaker.cri.page == i ? 'class=active' : '';
 			str += "<li "+strClass+"><a href='"+i+"'>" + i + "</a></li>";
 		}
@@ -254,9 +290,9 @@ handlebars 템플릿 코드
 	$(".pagination").on("click", "li a", function(event){
 		
 		event.preventDefault();
-		
+		//댓글 페이지 번호를 replyPage 변수에 담는다.
 		replyPage = $(this).attr("href");
-		
+		//요청한 댓글 페이지에 해당하는 댓글목록을 ajax로 가져온다.
 		getPage("/replies/"+bno+"/"+replyPage);
 		
 	});
@@ -368,16 +404,84 @@ $(document).ready(function(){
 		formObj.submit();
 	});
 	
-	$("#removeBtn").on("click", function(){
+	/* $("#removeBtn").on("click", function(){
 		formObj.attr("action", "/sboard/removePage");
 		formObj.submit();
-	});
+	}); */
+	
+
+	$("#removeBtn").on("click", function(){
+		
+		var replyCnt =  $("#replycntSmall").html();
+		
+		if(replyCnt > 0 ){
+			alert("댓글이 달린 게시물을 삭제할 수 없습니다.");
+			return;
+		}	
+		
+		var arr = [];
+		$(".uploadedList li").each(function(index){
+			 arr.push($(this).attr("data-src"));
+		});
+		
+		if(arr.length > 0){
+			//실제 파일을 삭제
+			$.post("/deleteAllFiles",{files:arr}, function(){
+				
+			});
+		}
+		
+		//데이터베이스 상에서 게시물과 첨부파일 삭제
+		formObj.attr("action", "/sboard/removePage");
+		formObj.submit();
+	});	
 	
 	$("#goListBtn ").on("click", function(){
 		formObj.attr("method", "get");
 		formObj.attr("action", "/sboard/list");
 		formObj.submit();
 	});
+	
+	//조회페이지가 로드되고 첨부파일을 가져온다.
+	var bno = ${boardVO.bno};
+	var template = Handlebars.compile($("#templateAttach").html());
+	//list를 하나씩 돌면서 첨부파일 데이터를 템플릿에 세팅하고 화면에 출력한다.
+	$.getJSON("/sboard/getAttach/"+bno,function(list){
+		$(list).each(function(){
+			
+			var fileInfo = getFileInfo(this);
+			
+			var html = template(fileInfo);
+			
+			 $(".uploadedList").append(html);
+			
+		});
+	});
+	
+	//첨부파일 이름을 클릭할 시
+	$(".uploadedList").on("click", ".mailbox-attachment-info a", function(event){
+			
+		var fileLink = $(this).attr("href");
+		//이미지파일이라면
+		if(checkImageType(fileLink)){
+			
+			event.preventDefault();
+					
+			var imgTag = $("#popup_img");
+			imgTag.attr("src", fileLink);
+			
+			console.log(imgTag.attr("src"));
+					
+			$(".popup").show('slow');
+			imgTag.addClass("show");		
+		}	
+	});
+	
+	$("#popup_img").on("click", function(){
+		
+		$(".popup").hide('slow');
+		
+	});	
 	
 });
 </script>
